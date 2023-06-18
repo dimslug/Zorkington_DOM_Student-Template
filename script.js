@@ -27,13 +27,53 @@ export const gameDetails = {
     // This shouldn't be more than 6-8 different commands.
 }
 
-let items = {
-
+//* Items
+class Item {
+    constructor(name, description, location, moveable ) {
+        this.name = name,
+        this.description = description,
+        this.location = location
+        this.moveable = moveable
+    }
 }
 
+const sword = new Item (
+    "Sword",
+    "A sword wielded by a hero in an ancient age. When grasped, a strange sense of nostalgia washes over you. Take it when going alone would otherwise be dangerous.",
+    "Guard Room",
+    true
+)
+const potato = new Item (
+    "Potato",
+    "It's a raw potato...",
+    "Dining Hall",
+    true
+)
+
+const crown = new Item (
+    "Crown",
+    "The Crown of the castle ruler, encrusted with jewels. There is something eerie about it...",
+    "Royal Bedchambers",
+    true
+)
+
+const jewel = new Item (
+    "Jewel",
+    'The Jewel shone of its own inner light, and appeared a "little globe of pallid light" in darkness, and yet, it took all light that fell upon it and changed it into "ten thousand sparks of white radiance, shot with glints of the rainbow"',
+    "Throne Room",
+    true
+)
+
+
+
+
+//* Locations
 let locations = {
 
 }
+let playerInventory = [];
+
+
 // Your code here
 
 export const domDisplay = (playerInput) => {
