@@ -14,19 +14,26 @@
 */
 
 export const gameDetails = {   
-    title: 'Game Title',
-    desc: 'Welcome to the world of... here are some quick rules & concepts...',
-    author: 'Student Name',
-    cohort: 'SBPT-2022',
-    startingRoomDescription: 'What you see before you is...',
+    title: 'Castle Crawl',
+    desc: 'Welcome to the world of Castle Crawl, here are some quick rules & concepts... use the commands listed below to navigate through the rooms of the castle and discover its secrets!',
+    author: 'Dominic Altobell',
+    cohort: 'ptsb-may-2023',
+    startingRoomDescription: 'What you see before you is a magnificent castle gate, it looks ancient and its shadow looms over you. What will you do?',
     playerCommands: [
         // replace these with your games commands as needed
-        'inspect', 'view', 'look', 'pickup',
+        'inspect', 'view', 'look', 'pickup','move left', 'move right','move forward','move backward'
     ]
     // Commands are basic things that a player can do throughout the game besides possibly moving to another room. This line will populate on the footer of your game for players to reference. 
     // This shouldn't be more than 6-8 different commands.
 }
 
+let items = {
+
+}
+
+let locations = {
+
+}
 // Your code here
 
 export const domDisplay = (playerInput) => {
