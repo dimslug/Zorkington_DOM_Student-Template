@@ -21,7 +21,7 @@ export const gameDetails = {
     startingRoomDescription: 'What you see before you is a magnificent castle gate, it looks ancient and its shadow looms over you. What will you do?',
     playerCommands: [
         // replace these with your games commands as needed
-        'inspect', 'view', 'look', 'pickup','move left', 'move right','move forward','move backward'
+        'inspect', 'view', 'use', 'pickup','move forward','move left', 'move right', 'move backward'
     ]
     // Commands are basic things that a player can do throughout the game besides possibly moving to another room. This line will populate on the footer of your game for players to reference. 
     // This shouldn't be more than 6-8 different commands.
@@ -64,13 +64,166 @@ const jewel = new Item (
     true
 )
 
+const lever = new Item (
+    "Lever",
+    "A weird lever... I wonder if it does anything.",
+    "Castle Gates",
+    false
+)
 
+const greenTunic = new Item (
+    "Green Tunic",
+    "A tunic that resonates with strength and courage. It feels as though it has been passed through time. Looks as though it could be worn by a child or an adult, but strangely you don't think it will fit you.",
+    "Guard Room",
+    false
+)
+
+const pillow = new Item (
+    "Pillow",
+    "A well loved pillow, the pillow case is slightly frayed at the ends but very soft. Whoever left this behind must miss it.",
+    "Royal Bed Chamber",
+    false
+)
+
+const roastedWholeBird = new Item (
+    "Roasted Whole Bird",
+    "A perfectly roasted whole bird. It's still warm as if it was just cooked minutes ago. Makes you hungry.",
+    "Dining Hall",
+    true
+)
+
+const letter = new Item (
+    "Letter",
+    "A tattered piece of paper on the floor. Scrawled with writing that you can't understand. There are markings in the four corners of the page. A potato, a jewel, a sword and a flower?",
+    false
+)
+
+const pitcherOfWine = new Item (
+    "Pitcher of Wine",
+    "The pitcher glistens with condensation, the wine is still cold. It smells of an oaky after birth.",
+    "Dining Hall",
+    false
+)
+
+const lilyOfTheValley = new Item (
+    "Lily of the Valler",
+    "A beautiful flower, there are tons of them scattered across the floor of the room. Gives you feelings of warmth and courage.",
+    "Royal Bed Chamber",
+    true
+)
+
+//* item lookup table
+
+let itemLookup = {
+    sword: sword,
+    jewel: jewel,
+    crown: crown,
+    potato: potato,
+    lever: lever,
+    greenTunic: greenTunic,
+    pillow: pillow,
+    roastedWholeBird: roastedWholeBird,
+    letter: letter,
+    pitcherOfWine: pitcherOfWine,
+    lilyOfTheValley, lilyOfTheValley
+}
 
 
 //* Locations
-let locations = {
+class Location {
+    constructor (name, description, Item, inspect) {
+        this.name = name;
+        this.description = description;
+        this.item = Item;
+        this.inspect = inspect
+    }
+
 
 }
+
+const castleGates = new Location (
+    "Castle Gates",
+    "A massive Castle Gate serves as the entrance to what seems to be an ancient castle. The gate's doors are swung open as if someone left in a hurry. The stones, weathered with time, look as through they have been standing for many ages, yet still hold true.",
+    ["Lever", "Rock"]
+)
+
+const greatHall = new Location (
+    "Great Hall",
+    "The Great Hall, the very core of the castle. Old weathed tapestries hang on the wall. It seems like you can navigate to most of the rooms of the castle from here.",
+    ["Potato", "Letter"]
+)
+
+const guardRoom = new Location (
+    "Guard Room",
+    "You enter what looks like a guard room. Old decayed armors and weapons line the walls, and are scattered on floor. Maybe there is something you can scavange from this room.",
+    ["Sword", "Green Tunic"]
+)
+
+const diningHall = new Location (
+    "Dining Hall",
+    "Disheveled chairs line a long table. Upon the table looks to be food? An intoxicating aroma of a freshly prepared feast wafts through the hall. The food has to be old, but it smells as if it was cooked only minutes ago.",
+    ["Roasted Whole Bird", "Pitcher of Wine"]
+)
+
+const throneRoom = new Location (
+    "Throne Room",
+    "A room steeped in divinity, light pours through intricate stain glass windows that look to depict stories and deeds of an acient time long past. An oddly nostalgic place, yet you have no memory of every being here.",
+    ["Crown", "Jewel"]
+)
+
+const royalBedchamber = new Location (
+    "Royal Bed Chamber",
+    "You stumble into a room to be greeted by a strong floral aroma, Lily of the Valley? A large bed sits in the middle of the room, covered in way too many pillows of course. You instantly feel exhausted, but you know you this is not the time for rest."
+    ["Lily of the Valley", "Pillow"]
+)
+
+//* State Machine
+let locationLookUp = {
+    castleGates: castleGates,
+    greatHall: greatHall,
+    guardRoom: guardRoom,
+    diningHall: diningHall,
+    throneRoom: throneRoom,
+    royalBedchamber: royalBedchamber
+}
+let locations = {
+    castleGates: ["greatHall"],
+    greatHall:["castleGates", "guardRoom", "diningHall", "throneRoom"],
+    guardRoom: ["greatHall"],
+    diningHall: ["greatHall"],
+    throneRoom: ["greatHall", "royalBedchamber"],
+    royalBedchamber: ["throneRoom"]
+};
+
+let currentLocation = "castleGates";
+
+function moveLocation(newLocation) {
+    let valid = locations[currentLocation];
+    let invalid = "You can't go there."
+
+    if (valid.includes(newLocation)) {
+        currentLocation = newLocation;
+    } else {
+        return invalid;
+    }
+}
+
+let commands = {
+    inspect: 'inspect',
+    view: 'view',
+    user: 'use',
+    pickup: 'pickup',
+    moveForward: 'move forward',
+    moveLeft: 'move left',
+    moveRight: 'move right',
+    moveBackward: 'move backward'
+}
+
+
+
+
+
+
 let playerInventory = [];
 
 
