@@ -13,7 +13,7 @@
             - use your browsers console throughout testing.
 */
 
-export const gameDetails = {   
+export const gameDetails = {
     title: 'Castle Crawl',
     desc: 'Welcome to the world of Castle Crawl, here are some quick rules & concepts... use the commands listed below to navigate through the rooms of the castle and discover its secrets!',
     author: 'Dominic Altobell',
@@ -21,7 +21,7 @@ export const gameDetails = {
     startingRoomDescription: 'What you see before you is a magnificent castle gate, it looks ancient and its shadow looms over you. What will you do?',
     playerCommands: [
         // replace these with your games commands as needed
-        'inspect', 'view', 'use', 'pickup','move forward','move left', 'move right', 'move back'
+        'inspect', 'view', 'use', 'pickup', 'move forward', 'move left', 'move right', 'move back'
     ]
     // Commands are basic things that a player can do throughout the game besides possibly moving to another room. This line will populate on the footer of your game for players to reference. 
     // This shouldn't be more than 6-8 different commands.
@@ -29,7 +29,7 @@ export const gameDetails = {
 
 //* Items
 class Item {
-    constructor(name, description, location, moveable ) {
+    constructor(name, description, location, moveable) {
         this.name = name,
         this.description = description,
         this.location = location
@@ -37,116 +37,123 @@ class Item {
     }
 }
 
-const sword = new Item (
+const sword = new Item(
     "Sword",
     "A sword wielded by a hero in an ancient age. When grasped, a strange sense of nostalgia washes over you. Take it when going alone would otherwise be dangerous.",
     "Guard Room",
     true
 )
-const potato = new Item (
+const potato = new Item(
     "Potato",
-    "It's a raw potato...",
+    "it's just a raw potato...",
     "Dining Hall",
     true
 )
 
-const crown = new Item (
+const crown = new Item(
     "Crown",
     "The Crown of the castle ruler, encrusted with jewels. There is something eerie about it...",
     "Royal Bedchambers",
     true
 )
 
-const jewel = new Item (
+const jewel = new Item(
     "Jewel",
     'The Jewel shone of its own inner light, and appeared a "little globe of pallid light" in darkness, and yet, it took all light that fell upon it and changed it into "ten thousand sparks of white radiance, shot with glints of the rainbow"',
     "Throne Room",
     true
 )
 
-const lever = new Item (
+const lever = new Item(
     "Lever",
-    "A weird lever... I wonder if it does anything.",
+    "I wonder if it does anything.",
     "Castle Gates",
     false
 )
 
-const greenTunic = new Item (
+const greenTunic = new Item(
     "Green Tunic",
     "A tunic that resonates with strength and courage. It feels as though it has been passed through time. Looks as though it could be worn by a child or an adult, but strangely you don't think it will fit you.",
     "Guard Room",
     false
 )
 
-const pillow = new Item (
+const pillow = new Item(
     "Pillow",
     "A well loved pillow, the pillow case is slightly frayed at the ends but very soft. Whoever left this behind must miss it.",
     "Royal Bed Chamber",
     false
 )
 
-const roastedWholeBird = new Item (
+const roastedWholeBird = new Item(
     "Roasted Whole Bird",
     "A perfectly roasted whole bird. It's still warm as if it was just cooked minutes ago. Makes you hungry.",
     "Dining Hall",
     true
 )
 
-const letter = new Item (
+const letter = new Item(
     "Letter",
-    "A tattered piece of paper on the floor. Scrawled with writing that you can't understand. There are markings in the four corners of the page. A potato, a jewel, a sword and a flower?",
+    "looks like tattered piece of paper on the floor. Scrawled with writing that you can't understand. There are markings in the four corners of the page. A potato, a jewel, a sword and a flower?",
     false
 )
 
-const pitcherOfWine = new Item (
+const pitcherOfWine = new Item(
     "Pitcher of Wine",
     "The pitcher glistens with condensation, the wine is still cold. It smells of an oaky after birth.",
     "Dining Hall",
     false
 )
 
-const lilyOfTheValley = new Item (
+const lilyOfTheValley = new Item(
     "Lily of the Valler",
     "A beautiful flower, there are tons of them scattered across the floor of the room. Gives you feelings of warmth and courage.",
     "Royal Bed Chamber",
     true
 )
 
+const rock = new Item (
+    'Rock',
+    "Its a shiny rock",
+    true
+)
+
 //* item lookup table
 
 let itemLookup = {
-    sword: sword,
-    jewel: jewel,
-    crown: crown,
-    potato: potato,
-    lever: lever,
-    greenTunic: greenTunic,
-    pillow: pillow,
-    roastedWholeBird: roastedWholeBird,
-    letter: letter,
-    pitcherOfWine: pitcherOfWine,
-    lilyOfTheValley, lilyOfTheValley
+    'Sword': sword,
+    'Jewel': jewel,
+    'Crown': crown,
+    'Potato': potato,
+    'Lever': lever,
+    'GreenTunic': greenTunic,
+    'Pillow': pillow,
+    'RoastedWholeBird': roastedWholeBird,
+    'Letter': letter,
+    'PitcherOfWine': pitcherOfWine,
+    'LilyOfTheValley': lilyOfTheValley,
+    'Rock': rock
 }
 
 
 //* Locations
 class Location {
-    constructor (name, description, item, inspect) {
+    constructor(name, description, item, direction) {
         this.name = name;
         this.description = description;
         this.item = item;
-        this.inspect = inspect
+        this.direction = direction;
     }
 
-    pickup(item) {
-        const item = itemLookup[itemName]
+    pickup(itemName) {
+        const anItem = itemLookup[itemName]
 
-        if(item && item.moveabel) {
-            playerInventory.push(item.name);
-            return `You look at the ${item.name}, ${item.description}, you place it in your bags.`;
-        } else if (item && !item.moveable) {
-            return `You look at the ${item.name}, ${item.description}, as you reach your hand out to take it you hear an faint ominous voice in your head. You can't really make out the words but you decide to leave the ${item.name} where it is.`;
-        } else if (!currentLocation.inspect) {
+        if (anItem && anItem.moveable) {
+            playerInventory.push(anItem.name);
+            return `You look at the ${anItem.name}, ${anItem.description}, you place it in your bags.`;
+        } else if (anItem && !anItem.moveable) {
+            return `You look at the ${anItem.name}, ${anItem.description}, as you reach your hand out to take it you hear an faint ominous voice in your head. You can't really make out the words but you decide to leave the ${anItem.name} where it is.`;
+        } else if (locationLookUp[currentLocation].inspect) {
             return `There is nothing like that to take.`;
         } else {
             return `You must be seeing things, there is nothing like that to take.`;
@@ -155,54 +162,76 @@ class Location {
 
 }
 
-const castleGates = new Location (
+const castleGates = new Location(
     "Castle Gates",
     "A massive Castle Gate serves as the entrance to what seems to be an ancient castle. The gate's doors are swung open as if someone left in a hurry. The stones, weathered with time, look as through they have been standing for many ages, yet still hold true.",
-    ["Lever", "Rock"]
+    ["Lever", "Rock"],
+    {
+        'move forward': 'greatHall'
+    }
 )
 
-const greatHall = new Location (
+const greatHall = new Location(
     "Great Hall",
     "The Great Hall, the very core of the castle. Old weathed tapestries hang on the wall. It seems like you can navigate to most of the rooms of the castle from here.",
-    ["Potato", "Letter"]
+    ["Potato", "Letter"],
+    {
+        'move forward': 'throneRoom',
+        'move back': 'castleGates',
+        'move left': 'diningHall',
+        'move right': 'guardRoom'
+    }
 )
 
-const guardRoom = new Location (
+const guardRoom = new Location(
     "Guard Room",
     "You enter what looks like a guard room. Old decayed armors and weapons line the walls, and are scattered on floor. Maybe there is something you can scavange from this room.",
-    ["Sword", "Green Tunic"]
+    ["Sword", "Green Tunic"],
+    {
+        'move back': 'greatHall'
+    }
 )
 
-const diningHall = new Location (
+const diningHall = new Location(
     "Dining Hall",
     "Disheveled chairs line a long table. Upon the table looks to be food? An intoxicating aroma of a freshly prepared feast wafts through the hall. The food has to be old, but it smells as if it was cooked only minutes ago.",
-    ["Roasted Whole Bird", "Pitcher of Wine"]
+    ["Roasted Whole Bird", "Pitcher of Wine"],
+    {
+        'move back': 'greatHall'
+    }
 )
 
-const throneRoom = new Location (
+const throneRoom = new Location(
     "Throne Room",
     "A room steeped in divinity, light pours through intricate stain glass windows that look to depict stories and deeds of an acient time long past. An oddly nostalgic place, yet you have no memory of every being here.",
-    ["Crown", "Jewel"]
+    ["Crown", "Jewel"],
+    {
+        'move back': 'greatHall',
+        'move forward': 'royalBedchamber'
+    }
 )
 
-const royalBedchamber = new Location (
+const royalBedchamber = new Location(
     "Royal Bed Chamber",
     "You stumble into a room to be greeted by a strong floral aroma, Lily of the Valley? A large bed sits in the middle of the room, covered in way too many pillows of course. You instantly feel exhausted, but you know you this is not the time for rest."
-    ["Lily of the Valley", "Pillow"]
+    ["Lily of the Valley", "Pillow"],
+    {
+        'move back': 'throneRoom'
+    }
 )
 
 //* State Machine
 let locationLookUp = {
-    castleGates: castleGates,
-    greatHall: greatHall,
-    guardRoom: guardRoom,
-    diningHall: diningHall,
-    throneRoom: throneRoom,
-    royalBedchamber: royalBedchamber
+    'castleGates': castleGates,
+    'greatHall': greatHall,
+    'guardRoom': guardRoom,
+    'diningHall': diningHall,
+    'throneRoom': throneRoom,
+    'royalBedchamber': royalBedchamber
 }
 let locations = {
-    castleGates: ["greatHall"],
-    greatHall:["castleGates", "guardRoom", "diningHall", "throneRoom"],
+    castleGates: ['greatHall'],
+    greatHall: ["castleGates", "guardRoom", "diningHall", "throneRoom"],
     guardRoom: ["greatHall"],
     diningHall: ["greatHall"],
     throneRoom: ["greatHall", "royalBedchamber"],
@@ -211,39 +240,22 @@ let locations = {
 
 let currentLocation = "castleGates";
 
-function moveLocation(newLocation) {
-    let valid = locations[currentLocation];
-    let invalid = "You can't go there."
-
-    if (valid.includes(newLocation)) {
-        currentLocation = newLocation;
-    } else {
-        return invalid;
-    }
-}
-
 let commands = {
-    inspect: 'inspect',
-    view: 'view',
-    user: 'use',
-    pickup: 'pickup',
-    moveForward: 'move forward',
-    moveLeft: 'move left',
-    moveRight: 'move right',
-    moveBack: 'move back'
+    inspect: ['inspect'],
+    view: ['view'],
+    user: ['use'],
+    pickup: ['pickup'],
+    move: ['move back', 'move right', 'move left', 'move forward']
 }
-
-
-
-
-
 
 let playerInventory = [];
 
+//console.log(locations);
 
 // Your code here
 
 export const domDisplay = (playerInput) => {
+
     /* 
         TODO: for students
         - This function must return a string. 
@@ -276,4 +288,62 @@ export const domDisplay = (playerInput) => {
     */
 
     // Your code here
-} 
+/*     let findItems = locationLookUp[currentLocation].item[0];
+    let findItemsTwo = locationLookUp[currentLocation].item[1]; */
+/*     console.log(commands);
+    console.log(commands[playerInput]);
+    console.log(typeof commands[playerInput]); */
+/*     console.log(locationLookUp[currentLocation].item[0])
+    console.log(typeof locationLookUp[currentLocation].item[0])
+    console.log(itemLookup[locationLookUp[currentLocation].item[0]])
+    console.log(typeof findItems)
+    console.log(itemLookup[findItems])
+    console.log(itemLookup[findItems].name)
+    console.log(itemLookup[findItems].description)
+    console.log(typeof itemLookup[locationLookUp[currentLocation].item]) */
+    //console.log(commands[playerInput].includes(playerInput))
+    //console.log(!playerInput == commands);
+
+    // invalid command handling - not quite sure what to do receive undefined and breaks later commands
+    /*     if(!commands[playerInput]) {
+            return `You're not sure what that means. (invalid command)`
+        }   */
+
+    // view command handling
+    if (commands.view.includes(playerInput)) {
+
+        return `${locationLookUp[currentLocation].description}`;
+    }
+    // pickup command handling
+
+    if (commands.pickup.includes(playerInput)) {
+        let pickupItem = locationLookUp[currentLocation].item[0];
+        let pickupItemTwo = locationLookUp[currentLocation].item[1];
+        console.log(locationLookUp[currentLocation].item)
+        let res = locationLookUp[currentLocation].pickup(pickupItem);
+        let resTwo = locationLookUp[currentLocation].pickup(pickupItemTwo)
+        return `${res}, ${resTwo}`
+    }
+
+    // inspect command handling -- shows items in the room
+    if (commands.inspect.includes(playerInput)) {
+        let findItems = locationLookUp[currentLocation].item[0];
+        let findItemsTwo = locationLookUp[currentLocation].item[1];
+
+        return `You see a ${itemLookup[findItems].name}, ${itemLookup[findItems].description} You also see ${itemLookup[findItemsTwo].name}, ${itemLookup[findItemsTwo].description}. `;
+    }
+
+    // move commands handling
+    if (commands.move.includes(playerInput)) {
+        if (commands.move.includes(playerInput) && locations[currentLocation].includes(locationLookUp[currentLocation].direction[playerInput])) {
+            currentLocation = locationLookUp[currentLocation].direction[playerInput];
+            //console.log(locationLookUp[currentLocation].description);
+            return `You move to the ${locationLookUp[currentLocation].name}.`;
+        } else {
+
+            return `You're in the ${locationLookUp[currentLocation].name}, you can't go that way. Try a different direction.`;
+        }
+    }
+
+
+};
