@@ -120,6 +120,7 @@ const rock = new Item (
 
 //* item lookup table
 
+
 let itemLookup = {
     'Sword': sword,
     'Jewel': jewel,
