@@ -21,7 +21,7 @@ export const gameDetails = {
     startingRoomDescription: 'What you see before you is a magnificent castle gate, it looks ancient and its shadow looms over you. What will you do?',
     playerCommands: [
         // replace these with your games commands as needed
-        'inspect', 'view', 'use', 'pickup','move forward','move left', 'move right', 'move backward'
+        'inspect', 'view', 'use', 'pickup','move forward','move left', 'move right', 'move back'
     ]
     // Commands are basic things that a player can do throughout the game besides possibly moving to another room. This line will populate on the footer of your game for players to reference. 
     // This shouldn't be more than 6-8 different commands.
@@ -131,13 +131,27 @@ let itemLookup = {
 
 //* Locations
 class Location {
-    constructor (name, description, Item, inspect) {
+    constructor (name, description, item, inspect) {
         this.name = name;
         this.description = description;
-        this.item = Item;
+        this.item = item;
         this.inspect = inspect
     }
 
+    pickup(item) {
+        const item = itemLookup[itemName]
+
+        if(item && item.moveabel) {
+            playerInventory.push(item.name);
+            return `You look at the ${item.name}, ${item.description}, you place it in your bags.`;
+        } else if (item && !item.moveable) {
+            return `You look at the ${item.name}, ${item.description}, as you reach your hand out to take it you hear an faint ominous voice in your head. You can't really make out the words but you decide to leave the ${item.name} where it is.`;
+        } else if (!currentLocation.inspect) {
+            return `There is nothing like that to take.`;
+        } else {
+            return `You must be seeing things, there is nothing like that to take.`;
+        }
+    }
 
 }
 
@@ -216,7 +230,7 @@ let commands = {
     moveForward: 'move forward',
     moveLeft: 'move left',
     moveRight: 'move right',
-    moveBackward: 'move backward'
+    moveBack: 'move back'
 }
 
 
