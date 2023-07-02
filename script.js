@@ -21,7 +21,7 @@ export const gameDetails = {
     startingRoomDescription: 'What you see before you is a magnificent castle gate, it looks ancient and its shadow looms over you. What will you do?',
     playerCommands: [
         // replace these with your games commands as needed
-        'inspect', 'view', 'use', 'pickup', 'move forward', 'move left', 'move right', 'move back'
+        'inspect', 'view', 'use', 'pickup', 'move forward', 'move left', 'move right', 'move back', 'drop'
     ]
     // Commands are basic things that a player can do throughout the game besides possibly moving to another room. This line will populate on the footer of your game for players to reference. 
     // This shouldn't be more than 6-8 different commands.
@@ -246,15 +246,16 @@ let commands = {
     view: ['view'],
     user: ['use'],
     pickup: ['pickup'],
-    move: ['move back', 'move right', 'move left', 'move forward']
+    move: ['move back', 'move right', 'move left', 'move forward'],
+    drop: ['drop']
 }
 
-let playerInventory = [];
+
 
 //console.log(locations);
 
 // Your code here
-
+let playerInventory = [];
 export const domDisplay = (playerInput) => {
 
     /* 
@@ -301,45 +302,63 @@ function capitalize(someWord) {
 	let fullWord = firstLetter.toUpperCase() + restOfWord.toLowerCase();
 
 	return fullWord;
-}
+};
 
     // invalid command handling - not quite sure what to do receive undefined and breaks later commands
-        if(!gameDetails.playerCommands.includes(playerInput)) {
+        if(!gameDetails.playerCommands.includes(pInput)) {
             return `You're not sure what that means. (invalid command)`
-        }  
+        };
         
     // view command handling
     if (commands.view.includes(pInput)) {
         
         return `${locationLookUp[currentLocation].description}`;
-    }
+    };
     // pickup command handling
 
     if (commands.pickup.includes(pInput)) {
-/*         console.log(locationLookUp[currentLocation].item)
-        let res = locationLookUp[currentLocation].pickup(findItems);
-        let resTwo = locationLookUp[currentLocation].pickup(findItemsTwo)
-        return `${res}, ${resTwo}` */
         let res = locationLookUp[currentLocation].pickup(capitalize(inputItem));
+        console.log(playerInventory);
         return res;
-    }
+    };
 
     // inspect command handling -- shows items in the room
     if (commands.inspect.includes(pInput)) {
-
+        
         return `You see a ${itemLookup[findItems].name}, ${itemLookup[findItems].description} You also see ${itemLookup[findItemsTwo].name}, ${itemLookup[findItemsTwo].description}. `;
-    }
+    };
 
     // move commands handling
     if (commands.move.includes(playerInput)) {
         if (commands.move.includes(playerInput) && locations[currentLocation].includes(locationLookUp[currentLocation].direction[playerInput])) {
             currentLocation = locationLookUp[currentLocation].direction[playerInput];
-            //console.log(locationLookUp[currentLocation].description);
             return `You move to the ${locationLookUp[currentLocation].name}.`;
         } else {
 
             return `You're in the ${locationLookUp[currentLocation].name}, you can't go that way. Try a different direction.`;
         }
+    };
+
+    if(commands.drop.includes(pInput)) {
+
+
+        if(!playerInventory.includes(capitalize(inputItem))){
+            console.log(playerInventory);
+            return `That item isn't in your inventory silly goose.`
+        } else if (playerInventory.includes(inputItem)){
+            let dIndex = playerInventory.indexOf(inputItem);
+            let dItem = playerInventory[dIndex];
+
+            // item duplication is a feature not a bug right?
+            locationLookUp[currentLocation].item.push(dItem);
+            playerInventory.slice(dIndex);
+            console.log(playerInventory);
+            console.log(locationLookUp[currentLocation].item);
+
+            return `You chuck the ${inputItem} on there ground... you feel kind of bad after. Maybe a little more gentle next time.`
+        } else {
+            return `Well that didn't work, are you okay?`
+        };
     }
 
 
