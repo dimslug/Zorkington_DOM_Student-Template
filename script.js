@@ -115,6 +115,7 @@ const lilyOfTheValley = new Item(
 const rock = new Item (
     'Rock',
     "Its a shiny rock",
+    'Castle Gates',
     true
 )
 
@@ -147,17 +148,16 @@ class Location {
     }
 
     pickup(itemName) {
-        const anItem = itemLookup[itemName]
 
-        if (anItem && anItem.moveable) {
-            playerInventory.push(anItem.name);
-            return `You look at the ${anItem.name}, ${anItem.description}, you place it in your bags.`;
-        } else if (anItem && !anItem.moveable) {
-            return `You look at the ${anItem.name}, ${anItem.description}, as you reach your hand out to take it you hear an faint ominous voice in your head. You can't really make out the words but you decide to leave the ${anItem.name} where it is.`;
-        } else if (locationLookUp[currentLocation].inspect) {
-            return `There is nothing like that to take.`;
+        if(!this.item.includes(itemName)){
+            return `Are you okay? You must be seeing things.`;
+        } else if (this.item.includes(itemName) && itemLookup[itemName].moveable){
+            playerInventory.push(itemLookup[itemName].name);
+            return `You placed the ${itemLookup[itemName].name} in your bags : ${itemLookup[itemName].description}`;
+        } else if (!itemLookup[itemName].moveable){
+            return `You don't think you should take the ${itemLookup[itemName].name}`;
         } else {
-            return `You must be seeing things, there is nothing like that to take.`;
+            return `Are you okay? You must be seeing things.`;
         }
     }
 
@@ -289,47 +289,43 @@ export const domDisplay = (playerInput) => {
     */
 
     // Your code here
-/*     let findItems = locationLookUp[currentLocation].item[0];
-    let findItemsTwo = locationLookUp[currentLocation].item[1]; */
-/*     console.log(commands);
-    console.log(commands[playerInput]);
-    console.log(typeof commands[playerInput]); */
-/*     console.log(locationLookUp[currentLocation].item[0])
-    console.log(typeof locationLookUp[currentLocation].item[0])
-    console.log(itemLookup[locationLookUp[currentLocation].item[0]])
-    console.log(typeof findItems)
-    console.log(itemLookup[findItems])
-    console.log(itemLookup[findItems].name)
-    console.log(itemLookup[findItems].description)
-    console.log(typeof itemLookup[locationLookUp[currentLocation].item]) */
-    //console.log(commands[playerInput].includes(playerInput))
-    //console.log(!playerInput == commands);
+
+let splinput = playerInput.split(' ');
+let inputItem = splinput.slice(1).join(' ');
+let pInput = splinput[0];
+
+
+function capitalize(someWord) {
+	let firstLetter = someWord[0];
+	let restOfWord = someWord.slice(1, someWord.length);
+	let fullWord = firstLetter.toUpperCase() + restOfWord.toLowerCase();
+
+	return fullWord;
+}
 
     // invalid command handling - not quite sure what to do receive undefined and breaks later commands
-    /*     if(!commands[playerInput]) {
+        if(!gameDetails.playerCommands.includes(playerInput)) {
             return `You're not sure what that means. (invalid command)`
-        }   */
-
+        }  
+        
     // view command handling
-    if (commands.view.includes(playerInput)) {
-
+    if (commands.view.includes(pInput)) {
+        
         return `${locationLookUp[currentLocation].description}`;
     }
     // pickup command handling
 
-    if (commands.pickup.includes(playerInput)) {
-        let pickupItem = locationLookUp[currentLocation].item[0];
-        let pickupItemTwo = locationLookUp[currentLocation].item[1];
-        console.log(locationLookUp[currentLocation].item)
-        let res = locationLookUp[currentLocation].pickup(pickupItem);
-        let resTwo = locationLookUp[currentLocation].pickup(pickupItemTwo)
-        return `${res}, ${resTwo}`
+    if (commands.pickup.includes(pInput)) {
+/*         console.log(locationLookUp[currentLocation].item)
+        let res = locationLookUp[currentLocation].pickup(findItems);
+        let resTwo = locationLookUp[currentLocation].pickup(findItemsTwo)
+        return `${res}, ${resTwo}` */
+        let res = locationLookUp[currentLocation].pickup(capitalize(inputItem));
+        return res;
     }
 
     // inspect command handling -- shows items in the room
-    if (commands.inspect.includes(playerInput)) {
-        let findItems = locationLookUp[currentLocation].item[0];
-        let findItemsTwo = locationLookUp[currentLocation].item[1];
+    if (commands.inspect.includes(pInput)) {
 
         return `You see a ${itemLookup[findItems].name}, ${itemLookup[findItems].description} You also see ${itemLookup[findItemsTwo].name}, ${itemLookup[findItemsTwo].description}. `;
     }
