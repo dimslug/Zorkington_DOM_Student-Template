@@ -31,8 +31,8 @@ export const gameDetails = {
 class Item {
     constructor(name, description, location, moveable) {
         this.name = name,
-        this.description = description,
-        this.location = location
+            this.description = description,
+            this.location = location
         this.moveable = moveable
     }
 }
@@ -112,7 +112,7 @@ const lilyOfTheValley = new Item(
     true
 )
 
-const rock = new Item (
+const rock = new Item(
     'Rock',
     "Its a shiny rock",
     'Castle Gates',
@@ -149,17 +149,19 @@ class Location {
 
     pickup(itemName) {
 
-        if(!this.item.includes(itemName)){
-            return `Are you okay? You must be seeing things.`;
-        } else if (this.item.includes(itemName) && itemLookup[itemName].moveable){
-            playerInventory.push(itemLookup[itemName].name);
-            return `You placed the ${itemLookup[itemName].name} in your bags : ${itemLookup[itemName].description}`;
-        } else if (!itemLookup[itemName].moveable){
-            return `You don't think you should take the ${itemLookup[itemName].name}`;
+        const item = itemLookup[itemName];
+        if (item === undefined) {
+            return `You don't see that item here.`
+        } else if (item.moveable === true) {
+            this.item = this.item.filter(item => item !== itemName);
+            playerInventory.push(itemName);
+            return `You picked up the ${itemName} and place it into you inventory. ${itemName} : ${item.description}.`;
         } else {
-            return `Are you okay? You must be seeing things.`;
+            return `You can't pick that up.`
         }
     }
+
+
 
 }
 
@@ -250,10 +252,6 @@ let commands = {
     drop: ['drop']
 }
 
-
-
-//console.log(locations);
-
 // Your code here
 let playerInventory = [];
 export const domDisplay = (playerInput) => {
@@ -291,28 +289,34 @@ export const domDisplay = (playerInput) => {
 
     // Your code here
 
-let splinput = playerInput.split(' ');
-let inputItem = splinput.slice(1).join(' ');
-let pInput = splinput[0];
+    let splinput = playerInput.split(' ');
+    let inputItem = splinput.slice(1).join(' ');
+    let pInput = splinput[0];
 
 
-function capitalize(someWord) {
-	let firstLetter = someWord[0];
-	let restOfWord = someWord.slice(1, someWord.length);
-	let fullWord = firstLetter.toUpperCase() + restOfWord.toLowerCase();
+    function capitalize(someWord) {
+        let firstLetter = someWord[0];
+        let restOfWord = someWord.slice(1, someWord.length);
+        let fullWord = firstLetter.toUpperCase() + restOfWord.toLowerCase();
 
-	return fullWord;
-};
+        return fullWord;
+    };
 
-    // invalid command handling - not quite sure what to do receive undefined and breaks later commands
-        if(!gameDetails.playerCommands.includes(pInput)) {
-            return `You're not sure what that means. (invalid command)`
-        };
-        
-    // view command handling
+    // invalid command handling
+    if (!gameDetails.playerCommands.includes(pInput) && pInput !== 'move') {
+        return `You're not sure what that means. (invalid command)`
+    };
+
+    // if player input is just view return the current location description, if player input is view itemname check if item is in inventory and return description if it is
     if (commands.view.includes(pInput)) {
-        
-        return `${locationLookUp[currentLocation].description}`;
+        if (inputItem === '') {
+            return `${locationLookUp[currentLocation].description}`;
+        } else if (inputItem !== '' && playerInventory.includes(capitalize(inputItem))) {
+            let item = itemLookup[capitalize(inputItem)];
+            return `${item.description}`;
+        } else {
+            return `You don't have that item in your inventory.`
+        }
     };
     // pickup command handling
 
@@ -322,11 +326,20 @@ function capitalize(someWord) {
         return res;
     };
 
-    // inspect command handling -- shows items in the room
+    // if player input is just inspect return items in the room with their description, if player input is inspect itemname return just that items description
     if (commands.inspect.includes(pInput)) {
-        
-        return `You see a ${itemLookup[findItems].name}, ${itemLookup[findItems].description} You also see ${itemLookup[findItemsTwo].name}, ${itemLookup[findItemsTwo].description}. `;
-    };
+        if (inputItem === '') {
+            let items = locationLookUp[currentLocation].item;
+            let itemNames = items.map(item => itemLookup[item].name);
+            return `You see ${itemNames.join(', ')}`;
+        } else if (inputItem !== '' && locationLookUp[currentLocation].item.includes(capitalize(inputItem))) {
+            let item = itemLookup[capitalize(inputItem)];
+            return `${item.description}`;
+        } else {
+            return `You don't see that item here.`
+        }
+    }
+
 
     // move commands handling
     if (commands.move.includes(playerInput)) {
@@ -339,26 +352,17 @@ function capitalize(someWord) {
         }
     };
 
-    if(commands.drop.includes(pInput)) {
-
-
-        if(!playerInventory.includes(capitalize(inputItem))){
-            console.log(playerInventory);
-            return `That item isn't in your inventory silly goose.`
-        } else if (playerInventory.includes(inputItem)){
-            let dIndex = playerInventory.indexOf(inputItem);
-            let dItem = playerInventory[dIndex];
-
-            // item duplication is a feature not a bug right?
-            locationLookUp[currentLocation].item.push(dItem);
-            playerInventory.slice(dIndex);
-            console.log(playerInventory);
-            console.log(locationLookUp[currentLocation].item);
-
-            return `You chuck the ${inputItem} on there ground... you feel kind of bad after. Maybe a little more gentle next time.`
+    // - ** Given ** the player wishes to drop an item in a new location.
+    // - ** Then ** the item should be removed from the player inventory.
+    // - ** And ** added to the rooms item list.
+    if (commands.drop.includes(pInput)) {
+        if (playerInventory.includes(capitalize(inputItem))) {
+            playerInventory = playerInventory.filter(item => item !== capitalize(inputItem));
+            locationLookUp[currentLocation].item.push(capitalize(inputItem));
+            return `You dropped the ${capitalize(inputItem)} on the floor.`;
         } else {
-            return `Well that didn't work, are you okay?`
-        };
+            return `You don't have that item in your inventory.`
+        }
     }
 
 
